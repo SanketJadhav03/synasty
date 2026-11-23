@@ -80,9 +80,9 @@ export default function HomePage() {
   ];
 
   return (
-    <div className="flex flex-col min-h-screen space-y-20 sm:space-y-28 pb-16 overflow-hidden">
+    <div className="flex flex-col min-h-screen space-y-12 sm:space-y-16 lg:space-y-20 pb-16 overflow-hidden">
       {/* 1. HERO SECTION */}
-      <section className="relative pt-12 sm:pt-24 pb-8 sm:pb-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full text-center">
+      <section className="relative pt-8 sm:pt-14 pb-4 sm:pb-8 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full text-center">
         {/* Glow backdrop decoration */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] sm:w-[600px] h-[350px] sm:h-[600px] bg-gradient-to-tr from-violet-600/20 via-pink-600/20 to-rose-600/20 blur-[120px] rounded-full pointer-events-none -z-10" />
 
@@ -121,7 +121,7 @@ export default function HomePage() {
         </div>
 
         {/* Quick Feature Badges */}
-        <div className="mt-12 pt-8 border-t border-slate-200/60 dark:border-slate-800/60 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto text-xs text-slate-600 dark:text-slate-400">
+        <div className="mt-8 pt-6 border-t border-slate-200/60 dark:border-slate-800/60 grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 max-w-4xl mx-auto text-xs text-slate-600 dark:text-slate-400">
           <div className="flex items-center justify-center gap-2">
             <ShieldCheck className="w-4 h-4 text-emerald-500" />
             <span>100% Legal Public Domain</span>
@@ -142,57 +142,90 @@ export default function HomePage() {
       </section>
 
       {/* 2. REAL DATABASE-DERIVED PLATFORM STATISTICS */}
-      <section className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
-        <div className="p-8 sm:p-12 rounded-3xl border border-slate-200/80 dark:border-slate-800 bg-white/70 dark:bg-slate-900/70 backdrop-blur-md shadow-xl">
-          <div className="text-center max-w-xl mx-auto mb-8">
-            <span className="text-xs font-bold uppercase tracking-wider text-violet-500">
+      <section className="px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto w-full">
+        <div className="p-5 sm:p-8 rounded-3xl border border-slate-200/80 dark:border-slate-800 bg-white/70 dark:bg-slate-900/70 backdrop-blur-md shadow-xl">
+          <div className="text-center max-w-lg mx-auto mb-6">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider bg-violet-500/10 text-violet-600 dark:text-violet-400 border border-violet-500/20 mb-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
               Live Platform Metrics
-            </span>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight mt-1">
+            </div>
+            <h2 className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
               Derived Directly from Our Database
             </h2>
           </div>
 
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 text-center">
-            <div className="space-y-1">
-              <div className="text-4xl sm:text-5xl font-black text-rose-500 tracking-tight">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+            <Link
+              href="/movies"
+              className="group p-3.5 sm:p-5 rounded-2xl bg-slate-50/70 dark:bg-slate-800/40 hover:bg-white dark:hover:bg-slate-800 border border-slate-200/60 dark:border-slate-700/60 hover:border-rose-500/40 hover:shadow-md transition-all duration-200 flex flex-col items-center text-center"
+            >
+              <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-xl bg-rose-500/10 text-rose-500 flex items-center justify-center mb-2.5 group-hover:scale-110 transition-transform">
+                <Film className="w-4 h-4 sm:w-5 sm:h-5" />
+              </div>
+              <div className="text-2xl sm:text-4xl font-black text-rose-500 tracking-tight">
                 {stats.movies}
               </div>
-              <div className="text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-300">
+              <div className="text-xs sm:text-sm font-bold text-slate-800 dark:text-slate-200 mt-1">
                 Verified Legal Films
               </div>
-              <p className="text-[11px] text-slate-400">Archived & Public Domain</p>
-            </div>
+              <p className="text-[10px] sm:text-[11px] text-slate-400 dark:text-slate-500 mt-0.5">
+                Archived & Public Domain
+              </p>
+            </Link>
 
-            <div className="space-y-1">
-              <div className="text-4xl sm:text-5xl font-black text-violet-500 tracking-tight">
+            <Link
+              href="/tools"
+              className="group p-3.5 sm:p-5 rounded-2xl bg-slate-50/70 dark:bg-slate-800/40 hover:bg-white dark:hover:bg-slate-800 border border-slate-200/60 dark:border-slate-700/60 hover:border-violet-500/40 hover:shadow-md transition-all duration-200 flex flex-col items-center text-center"
+            >
+              <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-xl bg-violet-500/10 text-violet-500 flex items-center justify-center mb-2.5 group-hover:scale-110 transition-transform">
+                <Wrench className="w-4 h-4 sm:w-5 sm:h-5" />
+              </div>
+              <div className="text-2xl sm:text-4xl font-black text-violet-500 tracking-tight">
                 {stats.tools}
               </div>
-              <div className="text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-300">
+              <div className="text-xs sm:text-sm font-bold text-slate-800 dark:text-slate-200 mt-1">
                 Free Online Utilities
               </div>
-              <p className="text-[11px] text-slate-400">Client-Side In-Browser</p>
-            </div>
+              <p className="text-[10px] sm:text-[11px] text-slate-400 dark:text-slate-500 mt-0.5">
+                Client-Side In-Browser
+              </p>
+            </Link>
 
-            <div className="space-y-1">
-              <div className="text-4xl sm:text-5xl font-black text-emerald-500 tracking-tight">
+            <Link
+              href="/services"
+              className="group p-3.5 sm:p-5 rounded-2xl bg-slate-50/70 dark:bg-slate-800/40 hover:bg-white dark:hover:bg-slate-800 border border-slate-200/60 dark:border-slate-700/60 hover:border-emerald-500/40 hover:shadow-md transition-all duration-200 flex flex-col items-center text-center"
+            >
+              <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center mb-2.5 group-hover:scale-110 transition-transform">
+                <Layers className="w-4 h-4 sm:w-5 sm:h-5" />
+              </div>
+              <div className="text-2xl sm:text-4xl font-black text-emerald-500 tracking-tight">
                 {stats.services}
               </div>
-              <div className="text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-300">
+              <div className="text-xs sm:text-sm font-bold text-slate-800 dark:text-slate-200 mt-1">
                 Curated Free Services
               </div>
-              <p className="text-[11px] text-slate-400">Dev & AI Resources</p>
-            </div>
+              <p className="text-[10px] sm:text-[11px] text-slate-400 dark:text-slate-500 mt-0.5">
+                Dev & AI Resources
+              </p>
+            </Link>
 
-            <div className="space-y-1">
-              <div className="text-4xl sm:text-5xl font-black text-amber-500 tracking-tight">
+            <Link
+              href="/blogs"
+              className="group p-3.5 sm:p-5 rounded-2xl bg-slate-50/70 dark:bg-slate-800/40 hover:bg-white dark:hover:bg-slate-800 border border-slate-200/60 dark:border-slate-700/60 hover:border-amber-500/40 hover:shadow-md transition-all duration-200 flex flex-col items-center text-center"
+            >
+              <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center mb-2.5 group-hover:scale-110 transition-transform">
+                <BookOpen className="w-4 h-4 sm:w-5 sm:h-5" />
+              </div>
+              <div className="text-2xl sm:text-4xl font-black text-amber-500 tracking-tight">
                 {stats.blogs}
               </div>
-              <div className="text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-300">
-                Tech Articles & Tutorials
+              <div className="text-xs sm:text-sm font-bold text-slate-800 dark:text-slate-200 mt-1">
+                Tech Articles & Guides
               </div>
-              <p className="text-[11px] text-slate-400">Editorial Engineering Guides</p>
-            </div>
+              <p className="text-[10px] sm:text-[11px] text-slate-400 dark:text-slate-500 mt-0.5">
+                Editorial Tutorials
+              </p>
+            </Link>
           </div>
         </div>
       </section>
@@ -220,12 +253,12 @@ export default function HomePage() {
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
           {trendingMovies.map((movie) => (
             <Link
               key={movie.slug}
               href={`/movies/${movie.slug}`}
-              className="group flex flex-col overflow-hidden rounded-3xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900/80 hover:border-rose-500/50 hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300"
+              className="group flex flex-col overflow-hidden rounded-2xl sm:rounded-3xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900/80 hover:border-rose-500/50 hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300"
             >
               <div className="relative aspect-[2/3] w-full overflow-hidden bg-slate-950">
                 <img
@@ -233,25 +266,25 @@ export default function HomePage() {
                   alt={movie.title}
                   className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
                 />
-                <div className="absolute top-3 right-3 flex items-center gap-1 px-2.5 py-1 rounded-full bg-black/80 backdrop-blur-md text-amber-400 text-xs font-bold border border-white/10">
-                  <Star className="w-3.5 h-3.5 fill-amber-400" />
+                <div className="absolute top-2 right-2 sm:top-3 sm:right-3 flex items-center gap-1 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full bg-black/80 backdrop-blur-md text-amber-400 text-[10px] sm:text-xs font-bold border border-white/10">
+                  <Star className="w-3 h-3 sm:w-3.5 sm:h-3.5 fill-amber-400" />
                   <span>{movie.rating}</span>
                 </div>
-                <div className="absolute bottom-3 left-3 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/90 text-white text-[10px] font-bold shadow-md">
-                  <Download className="w-2.5 h-2.5" /> Legal Public Domain
+                <div className="absolute bottom-2 left-2 sm:bottom-3 sm:left-3 flex items-center gap-1 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full bg-emerald-500/90 text-white text-[9px] sm:text-[10px] font-bold shadow-md">
+                  <Download className="w-2.5 h-2.5" /> Legal
                 </div>
               </div>
 
-              <div className="p-5 flex-1 flex flex-col justify-between space-y-2">
+              <div className="p-3 sm:p-5 flex-1 flex flex-col justify-between space-y-1.5 sm:space-y-2">
                 <div>
-                  <span className="text-[11px] text-slate-400 font-mono block">
+                  <span className="text-[10px] sm:text-[11px] text-slate-400 font-mono block">
                     {movie.releaseYear} • {movie.genres[0]}
                   </span>
-                  <h3 className="text-base font-bold text-slate-900 dark:text-white group-hover:text-rose-500 transition-colors line-clamp-1">
+                  <h3 className="text-xs sm:text-base font-bold text-slate-900 dark:text-white group-hover:text-rose-500 transition-colors line-clamp-1">
                     {movie.title}
                   </h3>
                 </div>
-                <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-2">
+                <p className="text-[11px] sm:text-xs text-slate-500 dark:text-slate-400 line-clamp-2">
                   {movie.overview}
                 </p>
               </div>

@@ -181,30 +181,30 @@ export default function MoviesCatalogPage() {
 
       {/* Movies Grid with YouTube-style Future Buffering Shimmer Skeletons */}
       {loading ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-12">
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6 mb-12">
           {Array.from({ length: 8 }).map((_, i) => (
             <div
               key={i}
-              className="flex flex-col overflow-hidden rounded-3xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900/80"
+              className="flex flex-col overflow-hidden rounded-2xl sm:rounded-3xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900/80"
             >
               {/* Aspect 2/3 Poster Shimmer */}
               <div className="relative aspect-[2/3] w-full shimmer-box" />
 
               {/* Details Skeleton */}
-              <div className="p-5 flex-1 flex flex-col justify-between space-y-3">
-                <div className="space-y-2">
+              <div className="p-3 sm:p-5 flex-1 flex flex-col justify-between space-y-2 sm:space-y-3">
+                <div className="space-y-1.5 sm:space-y-2">
                   <div className="flex items-center justify-between">
-                    <div className="w-12 h-3 rounded shimmer-box" />
-                    <div className="w-14 h-3 rounded shimmer-box" />
+                    <div className="w-10 sm:w-12 h-2.5 sm:h-3 rounded shimmer-box" />
+                    <div className="w-12 sm:w-14 h-2.5 sm:h-3 rounded shimmer-box" />
                   </div>
-                  <div className="w-40 h-5 rounded shimmer-box" />
-                  <div className="space-y-1.5 pt-1">
+                  <div className="w-28 sm:w-40 h-4 sm:h-5 rounded shimmer-box" />
+                  <div className="hidden sm:block space-y-1.5 pt-1">
                     <div className="w-full h-3 rounded shimmer-box" />
                     <div className="w-3/4 h-3 rounded shimmer-box" />
                   </div>
                 </div>
 
-                <div className="flex gap-1 pt-2 border-t border-slate-100 dark:border-slate-800">
+                <div className="hidden sm:flex gap-1 pt-2 border-t border-slate-100 dark:border-slate-800">
                   <div className="w-12 h-4 rounded shimmer-box" />
                   <div className="w-14 h-4 rounded shimmer-box" />
                 </div>
@@ -213,14 +213,14 @@ export default function MoviesCatalogPage() {
           ))}
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-12">
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6 mb-12">
           {movies.map((movie) => {
             const hasDownload = movie.sources?.some((s) => s.sourceType === 'download');
             return (
               <Link
                 key={movie.slug}
                 href={`/movies/${movie.slug}`}
-                className="group flex flex-col overflow-hidden rounded-3xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900/80 hover:border-rose-500/50 hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300"
+                className="group flex flex-col overflow-hidden rounded-2xl sm:rounded-3xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900/80 hover:border-rose-500/50 hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300"
               >
                 {/* Poster Container */}
                 <div className="relative aspect-[2/3] w-full overflow-hidden bg-slate-950">
@@ -233,40 +233,40 @@ export default function MoviesCatalogPage() {
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-transparent to-transparent opacity-80" />
 
                   {/* Rating Badge */}
-                  <div className="absolute top-3 right-3 flex items-center gap-1 px-2.5 py-1 rounded-full bg-slate-950/80 backdrop-blur-md text-amber-400 text-xs font-bold border border-white/10 shadow-sm">
-                    <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+                  <div className="absolute top-2 right-2 sm:top-3 sm:right-3 flex items-center gap-1 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full bg-slate-950/80 backdrop-blur-md text-amber-400 text-[10px] sm:text-xs font-bold border border-white/10 shadow-sm">
+                    <Star className="w-3 h-3 sm:w-3.5 sm:h-3.5 fill-amber-400 text-amber-400" />
                     <span>{movie.rating}</span>
                   </div>
 
                   {/* Legal Source Badges */}
-                  <div className="absolute bottom-3 left-3 right-3 flex flex-wrap gap-1.5">
+                  <div className="absolute bottom-2 left-2 right-2 sm:bottom-3 sm:left-3 sm:right-3 flex flex-wrap gap-1 sm:gap-1.5">
                     {hasDownload && (
-                      <span className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-500/90 backdrop-blur-sm text-white text-[10px] font-bold shadow-sm">
-                        <Download className="w-2.5 h-2.5" /> Legal Download
+                      <span className="flex items-center gap-1 px-1.5 py-0.5 sm:px-2 sm:py-0.5 rounded-full bg-emerald-500/90 backdrop-blur-sm text-white text-[9px] sm:text-[10px] font-bold shadow-sm">
+                        <Download className="w-2.5 h-2.5" /> Legal
                       </span>
                     )}
-                    <span className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-rose-500/90 backdrop-blur-sm text-white text-[10px] font-bold shadow-sm">
-                      <Play className="w-2.5 h-2.5" /> Watch Stream
+                    <span className="flex items-center gap-1 px-1.5 py-0.5 sm:px-2 sm:py-0.5 rounded-full bg-rose-500/90 backdrop-blur-sm text-white text-[9px] sm:text-[10px] font-bold shadow-sm">
+                      <Play className="w-2.5 h-2.5" /> Stream
                     </span>
                   </div>
                 </div>
 
                 {/* Details */}
-                <div className="p-5 flex-1 flex flex-col justify-between space-y-3">
+                <div className="p-3 sm:p-5 flex-1 flex flex-col justify-between space-y-2 sm:space-y-3">
                   <div>
-                    <div className="flex items-center justify-between text-xs text-slate-400 mb-1">
+                    <div className="flex items-center justify-between text-[10px] sm:text-xs text-slate-400 mb-0.5 sm:mb-1">
                       <span>{movie.releaseYear}</span>
                       <span>{movie.runtime ? `${movie.runtime}m` : 'Feature'}</span>
                     </div>
-                    <h2 className="text-base font-bold text-slate-900 dark:text-white group-hover:text-rose-500 transition-colors line-clamp-1">
+                    <h2 className="text-xs sm:text-base font-bold text-slate-900 dark:text-white group-hover:text-rose-500 transition-colors line-clamp-1">
                       {movie.title}
                     </h2>
-                    <p className="mt-1 text-xs text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed">
+                    <p className="mt-1 text-[11px] sm:text-xs text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed">
                       {movie.overview}
                     </p>
                   </div>
 
-                  <div className="flex flex-wrap gap-1 pt-2 border-t border-slate-100 dark:border-slate-800">
+                  <div className="hidden sm:flex flex-wrap gap-1 pt-2 border-t border-slate-100 dark:border-slate-800">
                     {movie.genres.map((g) => (
                       <span
                         key={g}
