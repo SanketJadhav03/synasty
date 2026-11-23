@@ -71,18 +71,9 @@ export function Header() {
                   className={`relative px-3.5 py-2 rounded-xl text-sm font-medium transition-all duration-200 flex items-center gap-2 select-none group ${
                     isActive
                       ? 'text-slate-900 dark:text-white font-semibold'
-                      : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100/70 dark:hover:bg-slate-800/50'
+                      : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100/60 dark:hover:bg-slate-800/40'
                   }`}
                 >
-                  {/* Subtle Translucent Floating Pill on Active Tab Only */}
-                  {isActive && (
-                    <motion.div
-                      layoutId="activeNavPill"
-                      className="absolute inset-0 bg-slate-900/[0.05] dark:bg-white/[0.08] border border-slate-900/10 dark:border-white/10 rounded-xl shadow-xs -z-10"
-                      transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-                    />
-                  )}
-
                   {/* Signature Color Icon */}
                   {link.icon && (
                     <link.icon
@@ -96,12 +87,12 @@ export function Header() {
 
                   <span>{link.label}</span>
 
-                  {/* Out-of-the-box Glowing Bottom Accent Line */}
+                  {/* Out-of-the-box Glowing Bottom Border Accent */}
                   {isActive && (
                     <motion.div
                       layoutId="activeNavAccent"
-                      className="absolute -bottom-1 left-2.5 right-2.5 h-[2px] rounded-full bg-gradient-to-r from-violet-600 via-pink-500 to-rose-500 shadow-[0_0_8px_rgba(236,72,153,0.6)]"
-                      transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+                      className="absolute -bottom-1 left-2.5 right-2.5 h-[2.5px] rounded-full bg-gradient-to-r from-violet-600 via-pink-500 to-rose-500 shadow-[0_0_10px_rgba(236,72,153,0.7)]"
+                      transition={{ type: 'spring', stiffness: 450, damping: 32 }}
                     />
                   )}
                 </Link>
