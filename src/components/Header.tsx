@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { motion } from 'framer-motion';
 import {
   Film,
   Wrench,
@@ -12,8 +13,7 @@ import {
   Search,
   Menu,
   X,
-  Shield,
-  ExternalLink,
+  Sparkles,
 } from 'lucide-react';
 import { SynastyLogo } from './SynastyLogo';
 import { ThemeToggle } from './ThemeToggle';
@@ -23,7 +23,6 @@ export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
-  const [adminLoggedIn, setAdminLoggedIn] = useState(false);
   const pathname = usePathname();
 
   useEffect(() => {
@@ -33,18 +32,6 @@ export function Header() {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-
-  useEffect(() => {
-    // Check if admin is signed in
-    fetch('/api/auth/me')
-      .then((res) => (res.ok ? res.json() : null))
-      .then((data) => {
-        if (data?.authenticated && data.user?.role === 'admin') {
-          setAdminLoggedIn(true);
-        }
-      })
-      .catch(() => {});
-  }, [pathname]);
 
   const navLinks = [
     { label: 'Home', href: '/' },
@@ -60,49 +47,72 @@ export function Header() {
       <header
         className={`sticky top-0 z-40 w-full transition-all duration-300 ${
           isScrolled
-            ? 'bg-white/80 dark:bg-slate-950/80 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80 shadow-sm'
+            ? 'bg-white/85 dark:bg-[#070a12]/85 backdrop-blur-xl border-b border-slate-200/80 dark:border-slate-800/80 shadow-sm'
             : 'bg-transparent border-b border-transparent'
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between">
-          {/* Logo with official 3D ribbon mark and wordmark */}
-          <SynastyLogo size="md" showTagline={false} />
+          {/* Official Brand Logo */}
+          <SynastyLogo size="md" showTagline={false} priority />
 
-          {/* Desktop Navigation Links */}
-          <nav className="hidden md:flex items-center gap-1 lg:gap-2">
+          {/* Out-of-the-box Floating Capsule Navigation */}
+          <nav className="hidden md:flex items-center p-1 rounded-2xl bg-slate-200/50 dark:bg-slate-900/60 backdrop-blur-md border border-slate-200/60 dark:border-slate-800/80 shadow-inner">
             {navLinks.map((link) => {
               const isActive =
                 link.href === '/'
                   ? pathname === '/'
                   : pathname.startsWith(link.href);
+
               return (
                 <Link
                   key={link.href}
                   href={link.href}
-                  className={`px-3 py-2 rounded-xl text-sm font-medium transition-all duration-200 flex items-center gap-1.5 ${
+                  className={`relative px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-semibold transition-colors duration-200 flex items-center gap-1.5 select-none ${
                     isActive
-                      ? 'bg-slate-100 dark:bg-slate-800/90 text-slate-900 dark:text-white font-semibold shadow-sm'
-                      : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100/60 dark:hover:bg-slate-800/50'
+                      ? 'text-slate-900 dark:text-white'
+                      : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                   }`}
                 >
-                  {link.icon && <link.icon className={`w-4 h-4 ${link.color}`} />}
-                  {link.label}
+                  {/* Fluid Active Sliding Pill */}
+                  {isActive && (
+                    <motion.div
+                      layoutId="activeNavTab"
+                      className="absolute inset-0 bg-white dark:bg-slate-800 rounded-xl shadow-[0_2px_8px_rgba(0,0,0,0.08),0_0_15px_-3px_rgba(168,85,247,0.2)] border border-slate-200/90 dark:border-slate-700/80 -z-10"
+                      transition={{ type: 'spring', stiffness: 450, damping: 32 }}
+                    />
+                  )}
+
+                  {link.icon && (
+                    <link.icon
+                      className={`w-4 h-4 transition-transform duration-200 ${
+                        isActive
+                          ? `${link.color} scale-110`
+                          : 'text-slate-400 group-hover:scale-105'
+                      }`}
+                    />
+                  )}
+
+                  <span>{link.label}</span>
+
+                  {isActive && (
+                    <span className="w-1.5 h-1.5 rounded-full bg-gradient-to-r from-pink-500 to-rose-500 animate-pulse ml-0.5" />
+                  )}
                 </Link>
               );
             })}
           </nav>
 
-          {/* Right Action Icons: Search, Theme Toggle, Admin link */}
+          {/* Right Action Icons: Search Trigger & Theme Toggle */}
           <div className="flex items-center gap-2 sm:gap-3">
             {/* Search Trigger */}
             <button
               onClick={() => setSearchOpen(true)}
               aria-label="Search Synasty"
-              className="flex items-center gap-2 px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 text-slate-500 dark:text-slate-400 hover:border-slate-300 dark:hover:border-slate-700 hover:text-slate-900 dark:hover:text-slate-100 transition-all text-xs"
+              className="flex items-center gap-2 px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white/60 dark:bg-slate-900/70 text-slate-500 dark:text-slate-400 hover:border-slate-300 dark:hover:border-slate-700 hover:text-slate-900 dark:hover:text-slate-100 transition-all text-xs cursor-pointer shadow-sm"
             >
               <Search className="w-4 h-4" />
               <span className="hidden sm:inline">Search...</span>
-              <kbd className="hidden sm:inline-block px-1.5 py-0.5 text-[10px] font-mono bg-white dark:bg-slate-800 rounded border border-slate-200 dark:border-slate-700 text-slate-400">
+              <kbd className="hidden sm:inline-block px-1.5 py-0.5 text-[10px] font-mono bg-slate-100 dark:bg-slate-800 rounded border border-slate-200 dark:border-slate-700 text-slate-400">
                 ⌘K
               </kbd>
             </button>
@@ -110,29 +120,10 @@ export function Header() {
             {/* Theme Toggle Button */}
             <ThemeToggle />
 
-            {/* Admin shortcut */}
-            {adminLoggedIn ? (
-              <Link
-                href="/admin"
-                className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-purple-600/10 hover:bg-purple-600/20 text-purple-400 border border-purple-500/30 text-xs font-semibold transition-all"
-              >
-                <Shield className="w-3.5 h-3.5" />
-                Admin Panel
-              </Link>
-            ) : (
-              <Link
-                href="/admin/login"
-                title="Admin Access"
-                className="hidden sm:flex p-2 rounded-xl text-slate-400 hover:text-slate-200 hover:bg-slate-800/40 transition-colors"
-              >
-                <Shield className="w-4 h-4" />
-              </Link>
-            )}
-
             {/* Mobile Hamburger Button */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 rounded-xl border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+              className="md:hidden p-2 rounded-xl border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
               aria-label="Toggle mobile menu"
             >
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -168,21 +159,13 @@ export function Header() {
 
               <div className="pt-3 mt-3 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between">
                 <Link
-                  href="/admin"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center gap-2 text-xs font-semibold text-purple-400 px-3 py-2 rounded-lg bg-purple-500/10"
-                >
-                  <Shield className="w-4 h-4" />
-                  Admin Panel
-                </Link>
-
-                <Link
                   href="/contact"
                   onClick={() => setMobileMenuOpen(false)}
                   className="text-xs text-slate-500 dark:text-slate-400 hover:underline px-2 py-1"
                 >
                   Contact Support
                 </Link>
+                <span className="text-[11px] text-slate-400">Everything Digital. One Destination.</span>
               </div>
             </div>
           </div>

@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import QRCode from 'qrcode';
 import { ToolLayout } from '@/components/ToolLayout';
 import { Download, Copy, RefreshCw, Check, Wifi, User, Globe, Type } from 'lucide-react';
+import { CustomSelect } from '@/components/CustomSelect';
 
 export default function QrGeneratorPage() {
   const [tab, setTab] = useState<'text' | 'url' | 'wifi' | 'contact'>('url');
@@ -322,16 +323,18 @@ export default function QrGeneratorPage() {
                 <label className="block text-[11px] font-bold uppercase text-slate-500 mb-1">
                   Error Correction
                 </label>
-                <select
+                <CustomSelect
                   value={errorCorrection}
-                  onChange={(e) => setErrorCorrection(e.target.value as any)}
-                  className="w-full px-2 py-1.5 rounded-lg border border-slate-300 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-xs"
-                >
-                  <option value="L">Low (7%)</option>
-                  <option value="M">Medium (15%)</option>
-                  <option value="Q">Quartile (25%)</option>
-                  <option value="H">High (30%)</option>
-                </select>
+                  onChange={(val) => setErrorCorrection(val as any)}
+                  options={[
+                    { value: 'L', label: 'Low (7%)' },
+                    { value: 'M', label: 'Medium (15%)' },
+                    { value: 'Q', label: 'Quartile (25%)' },
+                    { value: 'H', label: 'High (30%)' },
+                  ]}
+                  size="sm"
+                  className="w-full"
+                />
               </div>
             </div>
 

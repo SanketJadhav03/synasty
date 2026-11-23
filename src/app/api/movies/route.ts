@@ -58,7 +58,14 @@ export async function GET(request: NextRequest) {
       movies = CURATED_LEGAL_MOVIES as any;
     }
 
-    return NextResponse.json({ movies, isExternal: false });
+    return NextResponse.json(
+      { movies, isExternal: false },
+      {
+        headers: {
+          'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=300',
+        },
+      }
+    );
   } catch (error) {
     console.error('Fetch public movies error:', error);
     return NextResponse.json({ movies: CURATED_LEGAL_MOVIES, isExternal: false });

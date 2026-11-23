@@ -1,10 +1,11 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { Film, Search, Star, Download, Play, ShieldCheck, Sparkles, Filter } from 'lucide-react';
+import { Film, Search, Star, Download, Play, ShieldCheck, Sparkles } from 'lucide-react';
 import { CURATED_LEGAL_MOVIES, CuratedMovie } from '@/lib/curatedMovies';
 import { AdBanner } from '@/components/AdBanner';
+import { CustomSelect } from '@/components/CustomSelect';
 
 export default function MoviesCatalogPage() {
   const [movies, setMovies] = useState<CuratedMovie[]>(CURATED_LEGAL_MOVIES);
@@ -15,10 +16,24 @@ export default function MoviesCatalogPage() {
   const [sortBy, setSortBy] = useState<'popular' | 'rating' | 'newest'>('popular');
   const [loading, setLoading] = useState(false);
 
+  // In-memory cache for instant 0ms switching without buffering or UI disturbance
+  const cacheRef = useRef<Record<string, CuratedMovie[]>>({
+    'All_All_popular_': CURATED_LEGAL_MOVIES,
+  });
+
   const genres = ['All', 'Horror', 'Mystery', 'Classic', 'Comedy', 'Action', 'Sci-Fi', 'Romance'];
   const years = ['All', '1968', '1963', '1940', '1926', '1922', '1962'];
 
   useEffect(() => {
+    const cacheKey = `${selectedGenre}_${selectedYear}_${sortBy}_${search.trim().toLowerCase()}`;
+
+    // If cached, switch immediately without normal buffering
+    if (cacheRef.current[cacheKey]) {
+      setMovies(cacheRef.current[cacheKey]);
+      setLoading(false);
+      return;
+    }
+
     const fetchMovies = async () => {
       setLoading(true);
       try {
@@ -31,11 +46,9 @@ export default function MoviesCatalogPage() {
         const res = await fetch(`/api/movies?${queryParams.toString()}`);
         if (res.ok) {
           const data = await res.json();
-          if (data.movies && data.movies.length > 0) {
-            setMovies(data.movies);
-          } else {
-            setMovies([]);
-          }
+          const items = data.movies && data.movies.length > 0 ? data.movies : [];
+          cacheRef.current[cacheKey] = items;
+          setMovies(items);
         }
       } catch (e) {
         console.error('Fetch movies error:', e);
@@ -44,16 +57,47 @@ export default function MoviesCatalogPage() {
       }
     };
 
-    const timer = setTimeout(fetchMovies, 300);
+    const timer = setTimeout(fetchMovies, 150);
     return () => clearTimeout(timer);
   }, [search, selectedGenre, selectedYear, selectedRating, sortBy]);
 
   return (
     <div className="min-h-screen py-10 sm:py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      {/* High-Protein JSON-LD Structured Data for Movie Catalog */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'ItemList',
+            name: 'Synasty Legal & Public Domain Movie Catalog',
+            description: 'Explore public domain cinema archives and authorized distributor streams with verified copyright compliance.',
+            url: 'https://synasty.xyz/movies',
+            numberOfItems: movies.length,
+            itemListElement: movies.slice(0, 12).map((m, idx) => ({
+              '@type': 'ListItem',
+              position: idx + 1,
+              item: {
+                '@type': 'Movie',
+                name: m.title,
+                description: m.overview,
+                dateCreated: m.releaseYear?.toString(),
+                image: m.posterUrl,
+                aggregateRating: {
+                  '@type': 'AggregateRating',
+                  ratingValue: m.rating || 8.0,
+                  bestRating: 10,
+                },
+              },
+            })),
+          }),
+        }}
+      />
+
       {/* Page Header */}
       <div className="text-center max-w-3xl mx-auto mb-8">
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-rose-500/10 text-rose-500 border border-rose-500/20 mb-4">
-          <Film className="w-4 h-4" />
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20 mb-4 shadow-sm">
+          <Film className="w-4 h-4 text-rose-500" />
           Synasty Movie Discovery
         </div>
         <h1 className="text-3xl sm:text-5xl font-black text-slate-900 dark:text-white tracking-tight">
@@ -67,9 +111,9 @@ export default function MoviesCatalogPage() {
         </p>
 
         {/* Legal Compliance Badge */}
-        <div className="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-xs font-semibold">
+        <div className="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-xs font-semibold shadow-sm">
           <ShieldCheck className="w-4 h-4 flex-shrink-0" />
-          <span>100% Legal & Authorized: Download links provided strictly for verified public domain content.</span>
+          <span>100% Legal & Authorized: Direct links provided strictly for verified public domain content.</span>
         </div>
       </div>
 
@@ -83,61 +127,90 @@ export default function MoviesCatalogPage() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search movie titles, directors, or descriptions..."
-            className="w-full pl-12 pr-4 py-3.5 rounded-2xl border border-slate-300 dark:border-slate-800 bg-white dark:bg-slate-900/90 shadow-md text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-rose-500"
+            className="w-full pl-12 pr-4 py-3.5 rounded-2xl border border-slate-300 dark:border-slate-800 bg-white dark:bg-slate-900/90 shadow-md text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-rose-500 transition-all"
           />
         </div>
 
         {/* Filter Controls Row */}
-        <div className="flex flex-wrap items-center justify-between gap-3 p-3 rounded-2xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800">
+        <div className="flex flex-wrap items-center justify-between gap-3 p-2.5 sm:p-3 rounded-2xl bg-white/70 dark:bg-slate-950/70 border border-slate-200 dark:border-slate-800/80 shadow-sm backdrop-blur-md">
           {/* Genre Pills */}
           <div className="flex flex-wrap items-center gap-1.5">
-            {genres.map((g) => (
-              <button
-                key={g}
-                onClick={() => setSelectedGenre(g)}
-                className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all ${
-                  selectedGenre === g
-                    ? 'bg-rose-500 text-white shadow-sm'
-                    : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-                }`}
-              >
-                {g}
-              </button>
-            ))}
+            {genres.map((g) => {
+              const isSelected = selectedGenre === g;
+              return (
+                <button
+                  key={g}
+                  onClick={() => setSelectedGenre(g)}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all duration-200 cursor-pointer ${
+                    isSelected
+                      ? 'bg-gradient-to-r from-rose-600 to-pink-600 text-white shadow-md shadow-rose-500/20 scale-[1.02]'
+                      : 'bg-slate-100/80 dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/60 dark:hover:bg-slate-800/80'
+                  }`}
+                >
+                  {g}
+                </button>
+              );
+            })}
           </div>
 
-          {/* Year & Sort Controls */}
+          {/* Year & Sort Custom Select Dropdowns */}
           <div className="flex items-center gap-2">
-            <select
+            <CustomSelect
+              size="sm"
               value={selectedYear}
-              onChange={(e) => setSelectedYear(e.target.value)}
-              className="px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-xs text-slate-700 dark:text-slate-300"
-            >
-              <option value="All">All Years</option>
-              {years.filter((y) => y !== 'All').map((y) => (
-                <option key={y} value={y}>
-                  {y}
-                </option>
-              ))}
-            </select>
+              onChange={(val) => setSelectedYear(val)}
+              options={years.map((y) => ({
+                value: y,
+                label: y === 'All' ? 'All Years' : y,
+              }))}
+            />
 
-            <select
+            <CustomSelect
+              size="sm"
               value={sortBy}
-              onChange={(e) => setSortBy(e.target.value as any)}
-              className="px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-xs text-slate-700 dark:text-slate-300"
-            >
-              <option value="popular">Popular</option>
-              <option value="rating">Highest Rated</option>
-              <option value="newest">Release Year</option>
-            </select>
+              onChange={(val) => setSortBy(val as any)}
+              options={[
+                { value: 'popular', label: 'Popular' },
+                { value: 'rating', label: 'Highest Rated' },
+                { value: 'newest', label: 'Release Year' },
+              ]}
+            />
           </div>
         </div>
       </div>
 
-      {/* Movies Grid */}
+      {/* Movies Grid with YouTube-style Future Buffering Shimmer Skeletons */}
       {loading ? (
-        <div className="py-20 text-center text-sm text-slate-400 animate-pulse">
-          Loading movie catalog...
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-12">
+          {Array.from({ length: 8 }).map((_, i) => (
+            <div
+              key={i}
+              className="flex flex-col overflow-hidden rounded-3xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900/80"
+            >
+              {/* Aspect 2/3 Poster Shimmer */}
+              <div className="relative aspect-[2/3] w-full shimmer-box" />
+
+              {/* Details Skeleton */}
+              <div className="p-5 flex-1 flex flex-col justify-between space-y-3">
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <div className="w-12 h-3 rounded shimmer-box" />
+                    <div className="w-14 h-3 rounded shimmer-box" />
+                  </div>
+                  <div className="w-40 h-5 rounded shimmer-box" />
+                  <div className="space-y-1.5 pt-1">
+                    <div className="w-full h-3 rounded shimmer-box" />
+                    <div className="w-3/4 h-3 rounded shimmer-box" />
+                  </div>
+                </div>
+
+                <div className="flex gap-1 pt-2 border-t border-slate-100 dark:border-slate-800">
+                  <div className="w-12 h-4 rounded shimmer-box" />
+                  <div className="w-14 h-4 rounded shimmer-box" />
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-12">
@@ -155,6 +228,7 @@ export default function MoviesCatalogPage() {
                     src={movie.posterUrl}
                     alt={movie.title}
                     className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
+                    loading="lazy"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-transparent to-transparent opacity-80" />
 

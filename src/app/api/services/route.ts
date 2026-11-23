@@ -48,7 +48,14 @@ export async function GET(request: NextRequest) {
     }
 
     const services = await Service.find(filter).sort({ isFeatured: -1, createdAt: -1 }).lean();
-    return NextResponse.json({ services: services.length ? services : INITIAL_SERVICES });
+    return NextResponse.json(
+      { services: services.length ? services : INITIAL_SERVICES },
+      {
+        headers: {
+          'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=300',
+        },
+      }
+    );
   } catch (error) {
     console.error('Fetch public services error:', error);
     return NextResponse.json({ services: INITIAL_SERVICES });
