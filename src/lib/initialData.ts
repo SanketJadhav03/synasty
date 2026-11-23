@@ -237,7 +237,7 @@ export const INITIAL_BLOGS = [
     author: {
       name: 'Synasty Engineering',
       role: 'Core Architecture Team',
-      avatar: '/images/synasty-logo.png',
+      avatar: '/images/synasty-icon.png',
     },
     readingTime: 5,
     status: 'published' as const,
@@ -256,7 +256,7 @@ export const INITIAL_BLOGS = [
     author: {
       name: 'Synasty Editorial',
       role: 'Media & Culture Critic',
-      avatar: '/images/synasty-logo.png',
+      avatar: '/images/synasty-icon.png',
     },
     readingTime: 4,
     status: 'published' as const,
@@ -275,7 +275,7 @@ export const INITIAL_BLOGS = [
     author: {
       name: 'Synasty Security Team',
       role: 'Information Security Specialist',
-      avatar: '/images/synasty-logo.png',
+      avatar: '/images/synasty-icon.png',
     },
     readingTime: 6,
     status: 'published' as const,

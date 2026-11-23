@@ -4,83 +4,128 @@ import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 
-interface SynastyLogoProps {
+export interface SynastyLogoProps {
   subBrand?: 'Movies' | 'Tools' | 'Services' | 'Blogs' | 'Admin';
   size?: 'sm' | 'md' | 'lg' | 'xl';
+  variant?: 'wordmark' | 'full' | 'icon';
   showTagline?: boolean;
   href?: string;
   className?: string;
+  priority?: boolean;
 }
 
 export function SynastyLogo({
   subBrand,
   size = 'md',
+  variant,
   showTagline = false,
   href = '/',
   className = '',
+  priority = false,
 }: SynastyLogoProps) {
-  const sizeMap = {
-    sm: { imgWidth: 32, imgHeight: 32, textClass: 'text-lg', badgeClass: 'text-[10px] px-1.5 py-0.5' },
-    md: { imgWidth: 38, imgHeight: 38, textClass: 'text-xl', badgeClass: 'text-xs px-2 py-0.5' },
-    lg: { imgWidth: 48, imgHeight: 48, textClass: 'text-2xl', badgeClass: 'text-xs px-2.5 py-1' },
-    xl: { imgWidth: 64, imgHeight: 64, textClass: 'text-3xl', badgeClass: 'text-sm px-3 py-1' },
+  // If variant is not explicitly set: showTagline=true selects 'full', else 'wordmark'
+  const resolvedVariant = variant ?? (showTagline ? 'full' : 'wordmark');
+
+  // Height and aspect ratios for each size
+  const sizeConfig = {
+    sm: {
+      heightClass: 'h-6 sm:h-7',
+      iconClass: 'w-7 h-7',
+      badgeClass: 'text-[10px] px-2 py-0.5 ml-1.5',
+    },
+    md: {
+      heightClass: 'h-8 sm:h-9',
+      iconClass: 'w-9 h-9',
+      badgeClass: 'text-xs px-2.5 py-0.5 ml-2',
+    },
+    lg: {
+      heightClass: 'h-11 sm:h-12',
+      iconClass: 'w-12 h-12',
+      badgeClass: 'text-xs px-3 py-1 ml-2.5',
+    },
+    xl: {
+      heightClass: 'h-14 sm:h-16 lg:h-20',
+      iconClass: 'w-16 h-16 sm:w-20 sm:h-20',
+      badgeClass: 'text-sm px-3.5 py-1 ml-3',
+    },
+  }[size];
+
+  const subBrandStyles: Record<string, string> = {
+    Movies: 'bg-rose-500/10 text-rose-500 border-rose-500/25',
+    Tools: 'bg-violet-500/10 text-violet-500 border-violet-500/25',
+    Services: 'bg-emerald-500/10 text-emerald-500 border-emerald-500/25',
+    Blogs: 'bg-amber-500/10 text-amber-500 border-amber-500/25',
+    Admin: 'bg-purple-500/10 text-purple-400 border-purple-500/25',
   };
 
-  const currentSize = sizeMap[size];
-
-  const logoContent = (
-    <div className={`inline-flex items-center gap-2.5 group cursor-pointer ${className}`}>
-      {/* Official 3D Ribbon Play Mark from Image */}
-      <div className="relative overflow-hidden rounded-xl p-0.5 bg-gradient-to-tr from-violet-600 via-pink-500 to-rose-500 shadow-md group-hover:shadow-violet-500/25 transition-all duration-300">
-        <div className="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center p-1">
+  const renderLogoGraphic = () => {
+    if (resolvedVariant === 'icon') {
+      return (
+        <div className={`relative ${sizeConfig.iconClass} flex-shrink-0 transition-transform duration-300 group-hover:scale-105`}>
           <Image
-            src="/images/synasty-logo.png"
-            alt="Synasty Logo"
-            width={currentSize.imgWidth}
-            height={currentSize.imgHeight}
-            className="object-contain transform group-hover:scale-105 transition-transform duration-300"
-            priority
+            src="/images/synasty-icon.png"
+            alt="Synasty Brand Mark"
+            width={512}
+            height={512}
+            className="w-full h-full object-contain drop-shadow-md"
+            priority={priority}
           />
         </div>
+      );
+    }
+
+    const isFull = resolvedVariant === 'full';
+    const darkSrc = isFull ? '/images/synasty-logo-dark.png' : '/images/synasty-wordmark-dark.png';
+    const lightSrc = isFull ? '/images/synasty-logo-light.png' : '/images/synasty-wordmark-light.png';
+    const aspectWidth = isFull ? 940 : 929;
+    const aspectHeight = isFull ? 325 : 307;
+
+    return (
+      <div className="relative inline-flex items-center flex-shrink-0 transition-transform duration-300 group-hover:scale-[1.02]">
+        {/* Dark Theme: Official glowing wordmark with white text */}
+        <Image
+          src={darkSrc}
+          alt="Synasty"
+          width={aspectWidth}
+          height={aspectHeight}
+          className={`hidden dark:block ${sizeConfig.heightClass} w-auto object-contain select-none pointer-events-none drop-shadow-sm`}
+          priority={priority}
+        />
+        {/* Light Theme: Official glowing wordmark with dark slate text */}
+        <Image
+          src={lightSrc}
+          alt="Synasty"
+          width={aspectWidth}
+          height={aspectHeight}
+          className={`block dark:hidden ${sizeConfig.heightClass} w-auto object-contain select-none pointer-events-none drop-shadow-sm`}
+          priority={priority}
+        />
       </div>
+    );
+  };
 
-      <div className="flex flex-col">
-        <div className="flex items-center gap-2">
-          <span className={`font-black tracking-tight ${currentSize.textClass} text-slate-900 dark:text-white flex items-center`}>
-            Syn<span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-rose-500">a</span>sty
-          </span>
+  const logoContent = (
+    <div className={`inline-flex items-center group cursor-pointer ${className}`}>
+      {renderLogoGraphic()}
 
-          {subBrand && (
-            <span
-              className={`rounded-full font-semibold uppercase tracking-wider border ${currentSize.badgeClass} ${
-                subBrand === 'Movies'
-                  ? 'bg-rose-500/10 text-rose-500 border-rose-500/20'
-                  : subBrand === 'Tools'
-                  ? 'bg-violet-500/10 text-violet-500 border-violet-500/20'
-                  : subBrand === 'Services'
-                  ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20'
-                  : subBrand === 'Blogs'
-                  ? 'bg-amber-500/10 text-amber-500 border-amber-500/20'
-                  : 'bg-purple-500/10 text-purple-400 border-purple-500/20'
-              }`}
-            >
-              {subBrand}
-            </span>
-          )}
-        </div>
-
-        {showTagline && (
-          <span className="text-[11px] font-medium text-slate-500 dark:text-slate-400 tracking-tight">
-            Everything Digital.{' '}
-            <span className="text-rose-500 font-semibold">One Destination.</span>
-          </span>
-        )}
-      </div>
+      {subBrand && (
+        <span
+          className={`inline-flex items-center font-bold uppercase tracking-wider rounded-full border shadow-sm transition-colors ${sizeConfig.badgeClass} ${
+            subBrandStyles[subBrand] || subBrandStyles.Admin
+          }`}
+        >
+          {subBrand}
+        </span>
+      )}
     </div>
   );
 
   if (href) {
-    return <Link href={href}>{logoContent}</Link>;
+    return (
+      <Link href={href} aria-label="Synasty Home">
+        {logoContent}
+      </Link>
+    );
   }
 
   return logoContent;

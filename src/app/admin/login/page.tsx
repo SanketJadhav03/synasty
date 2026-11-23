@@ -59,7 +59,9 @@ export default function AdminLoginPage() {
     <div className="min-h-screen flex items-center justify-center p-4 bg-slate-950">
       <div className="w-full max-w-md space-y-6">
         <div className="text-center space-y-3">
-          <SynastyLogo size="lg" subBrand="Admin" />
+          <div className="flex justify-center">
+            <SynastyLogo size="lg" subBrand="Admin" />
+          </div>
           <h1 className="text-2xl font-black text-white tracking-tight">
             Administrator Portal
           </h1>

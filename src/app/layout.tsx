@@ -64,7 +64,7 @@ export const metadata: Metadata = {
   icons: {
     icon: '/favicon.ico',
     shortcut: '/favicon.ico',
-    apple: '/images/synasty-logo.png',
+    apple: '/images/synasty-icon.png',
   },
 };
 

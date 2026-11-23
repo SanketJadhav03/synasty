@@ -29,7 +29,7 @@ export async function runDatabaseSeed(forceReset = false) {
     settings = await WebsiteSetting.create({
       siteName: 'Synasty',
       siteUrl: process.env.NEXT_PUBLIC_SITE_URL || 'https://synasty.xyz',
-      logoUrl: '/images/synasty-logo.png',
+      logoUrl: '/images/synasty-logo-dark.png',
       faviconUrl: '/favicon.ico',
       defaultSeoTitle: 'Synasty – Everything Digital. One Destination.',
       defaultSeoDescription:

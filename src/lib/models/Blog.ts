@@ -38,7 +38,7 @@ const BlogSchema = new Schema<IBlog>(
     author: {
       name: { type: String, default: 'Synasty Editorial Team' },
       role: { type: String, default: 'Tech & Digital Analyst' },
-      avatar: { type: String, default: '/images/synasty-logo.png' },
+      avatar: { type: String, default: '/images/synasty-icon.png' },
     },
     readingTime: { type: Number, default: 3 },
     status: {

@@ -27,7 +27,7 @@ const WebsiteSettingSchema = new Schema<IWebsiteSetting>(
   {
     siteName: { type: String, default: 'Synasty' },
     siteUrl: { type: String, default: 'https://synasty.xyz' },
-    logoUrl: { type: String, default: '/images/synasty-logo.png' },
+    logoUrl: { type: String, default: '/images/synasty-logo-dark.png' },
     faviconUrl: { type: String, default: '/favicon.ico' },
     defaultSeoTitle: {
       type: String,

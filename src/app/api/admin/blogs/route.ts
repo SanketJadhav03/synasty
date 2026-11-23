@@ -73,7 +73,7 @@ export async function POST(request: NextRequest) {
       author: {
         name: authorName || session?.name || 'Synasty Editorial Team',
         role: authorRole || 'Technology Editor',
-        avatar: '/images/synasty-logo.png',
+        avatar: '/images/synasty-icon.png',
       },
       readingTime,
       status: status || 'published',

@@ -7,7 +7,7 @@ export default function AdminSettingsPage() {
   const [settings, setSettings] = useState<any>({
     siteName: 'Synasty',
     siteUrl: 'https://synasty.xyz',
-    logoUrl: '/images/synasty-logo.png',
+    logoUrl: '/images/synasty-logo-dark.png',
     defaultSeoTitle: 'Synasty – Everything Digital. One Destination.',
     defaultSeoDescription:
       'Discover movies, explore powerful free online utilities, access useful curated digital services, and learn with technology tutorials at Synasty.',

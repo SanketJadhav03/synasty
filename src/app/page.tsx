@@ -94,8 +94,8 @@ export default function HomePage() {
         </div>
 
         {/* Official Brand Logo Presentation */}
-        <div className="flex justify-center mb-6">
-          <SynastyLogo size="xl" showTagline={false} />
+        <div className="flex justify-center mb-8">
+          <SynastyLogo size="xl" showTagline={false} priority />
         </div>
 
         {/* Main Heading as per Requirement 4B */}

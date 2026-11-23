@@ -14,7 +14,9 @@ export default function AboutPage() {
     <div className="min-h-screen py-12 sm:py-20 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto space-y-16">
       {/* Hero Header */}
       <div className="text-center space-y-4 max-w-3xl mx-auto">
-        <SynastyLogo size="xl" showTagline={true} />
+        <div className="flex justify-center">
+          <SynastyLogo size="xl" showTagline={true} />
+        </div>
         <h1 className="text-3xl sm:text-5xl font-black text-slate-900 dark:text-white tracking-tight mt-6">
           Everything Digital.{' '}
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-600 via-pink-600 to-rose-500">
