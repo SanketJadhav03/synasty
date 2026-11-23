@@ -8,7 +8,6 @@ import {
   Layers,
   BookOpen,
   ArrowRight,
-  Sparkles,
   ShieldCheck,
   Star,
   CheckCircle2,
@@ -86,12 +85,6 @@ export default function HomePage() {
       <section className="relative pt-12 sm:pt-24 pb-8 sm:pb-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full text-center">
         {/* Glow backdrop decoration */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] sm:w-[600px] h-[350px] sm:h-[600px] bg-gradient-to-tr from-violet-600/20 via-pink-600/20 to-rose-600/20 blur-[120px] rounded-full pointer-events-none -z-10" />
-
-        {/* Announcement Pill */}
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold bg-violet-500/10 dark:bg-violet-500/10 text-violet-600 dark:text-violet-400 border border-violet-500/20 mb-8 shadow-sm backdrop-blur-md">
-          <Sparkles className="w-3.5 h-3.5" />
-          <span>The Next-Generation All-in-One Digital Platform</span>
-        </div>
 
         {/* Official Brand Logo Presentation */}
         <div className="flex justify-center mb-8">
